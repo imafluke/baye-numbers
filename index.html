@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>The Numbers</title>
+<style>
+  :root{
+    --bg:#050505; --bg2:#0a0a0a; --card:#121212; --card2:#181818;
+    --line:#262626; --line2:#333;
+    --cream:#f6f1e8; --muted:#a8a39a; --dim:#6b6760;
+    --orange:#ff6a00; --orange-soft:#2a1805;
+    --green:#4ade80; --amber:#fbbf24; --red:#f87171;
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -5%, rgba(255,106,0,.08), transparent 60%),
+      radial-gradient(900px 500px at 0% 10%, rgba(255,106,0,.04), transparent 55%),
+      var(--bg);
+    color:var(--cream);
+    font-family:"Segoe UI",ui-sans-serif,system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    font-variant-numeric:tabular-nums;
+    line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:80px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+
+  header.bar{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+    background:rgba(5,5,5,.72);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{font-weight:700;letter-spacing:.04em;font-size:15px}
+  .brand .dot{color:var(--orange)}
+  nav a{color:var(--muted);text-decoration:none;font-size:13px;margin-left:22px;font-weight:600;letter-spacing:.02em;transition:color .15s}
+  nav a:hover{color:var(--cream)}
+  @media(max-width:780px){nav{display:none}}
+
+  .hero{padding:68px 0 30px}
+  .eyebrow{color:var(--orange);font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase}
+  h1{font-size:clamp(38px,6.5vw,64px);line-height:1.02;font-weight:800;letter-spacing:-.02em;margin-top:14px}
+  h1 .accent{color:var(--orange)}
+  .sub{color:var(--muted);font-size:18px;margin-top:18px;max-width:640px}
+
+  .band{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:38px}
+  @media(max-width:760px){.band{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+  .stat .k{color:var(--dim);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .stat .v{font-size:29px;font-weight:800;margin-top:8px;letter-spacing:-.01em}
+  .stat .v.o{color:var(--orange)} .stat .v.g{color:var(--green)}
+  .stat .v small{font-size:15px;color:var(--muted);font-weight:600}
+  .stat .n{color:var(--muted);font-size:12px;margin-top:6px}
+
+  section{padding:54px 0 0}
+  .seyebrow{color:var(--orange);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+  h2{font-size:clamp(25px,3.6vw,34px);font-weight:800;letter-spacing:-.01em;margin-top:10px}
+  .lead{color:var(--muted);font-size:16px;margin-top:10px;max-width:660px}
+  .ill{display:inline-block;background:var(--card2);border:1px solid var(--line);color:var(--muted);
+    font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-left:8px;vertical-align:middle}
+
+  /* tiers */
+  .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+  @media(max-width:880px){.tiers{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:480px){.tiers{grid-template-columns:1fr}}
+  .tier{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;position:relative;transition:transform .15s,border-color .15s}
+  .tier:hover{transform:translateY(-3px);border-color:var(--line2)}
+  .tier.hot{border-color:var(--orange);background:linear-gradient(180deg,var(--orange-soft),var(--card) 60%)}
+  .tier.soon{border-style:dashed;opacity:.85}
+  .tier .badge{position:absolute;top:-10px;right:16px;background:var(--orange);color:#000;font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:20px;text-transform:uppercase}
+  .tier .badge.grey{background:var(--line2);color:var(--cream)}
+  .tier .name{color:var(--muted);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  .tier .price{font-size:32px;font-weight:800;margin-top:8px}
+  .tier .price small{font-size:14px;color:var(--muted);font-weight:600}
+  .tier .req{margin-top:6px;color:var(--orange);font-weight:700;font-size:13px}
+  .tier .data{margin-top:14px;color:var(--cream);font-size:13px;line-height:1.5}
+  .tier .data b{color:var(--cream)}
+  .note{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;color:var(--muted);font-size:13px}
+  .note b{color:var(--cream)}
+
+  /* tables */
+  .tbl{margin-top:24px;border:1px solid var(--line);border-radius:var(--r);overflow-x:auto}
+  .tbl table{width:100%;border-collapse:collapse;min-width:540px}
+  .tbl th,.tbl td{padding:13px 16px;text-align:left;font-size:13.5px;border-bottom:1px solid var(--line)}
+  .tbl thead th{background:var(--card2);color:var(--cream);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+  .tbl tbody tr:last-child td{border-bottom:none}
+  .tbl tbody tr:nth-child(odd){background:rgba(255,255,255,.012)}
+  .tbl td.name{font-weight:700;color:var(--cream)}
+  .tbl td.num{text-align:right;font-weight:600;white-space:nowrap}
+  .tbl td.give{color:var(--muted)}
+  .tbl .edge{background:var(--orange-soft)} .tbl td.edge{color:var(--orange);font-weight:600} .tbl th.edge{background:#3a230a;color:var(--orange)}
+  .tbl tr.totalrow td{background:var(--card2);font-weight:800;color:var(--cream);border-top:1px solid var(--line2)}
+  .tbl tr.netrow td{color:var(--green);font-weight:800}
+  .tbl th.r,.tbl td.r{text-align:right}
+  .kicker{margin-top:16px;color:var(--orange);font-weight:700;font-size:15px}
+  .chips{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 13px;font-size:12px;color:var(--muted)}
+  .chip b{color:var(--cream)}
+
+  /* calc */
+  .calc{margin-top:26px;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;padding:26px}
+  .ctrls{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+  .userpick{flex:1;min-width:260px}
+  .userpick .lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .userpick .lab .t{color:var(--muted);font-size:13px;font-weight:600}
+  .userpick .lab .u{font-size:26px;font-weight:800}.userpick .lab .u b{color:var(--orange)}
+  .togs{display:flex;gap:14px;flex-wrap:wrap}
+  .tog small{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+  .toggle{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:11px;padding:4px}
+  .toggle button{background:none;border:none;color:var(--muted);font:inherit;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .15s}
+  .toggle button.on{background:var(--orange);color:#000}
+  .settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin-top:20px;align-items:end}
+  @media(max-width:760px){.settings{grid-template-columns:1fr}}
+  .setting small{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px}
+  .setting .val{font-size:17px;font-weight:800;margin-top:9px}
+  .setting .val .est{font-size:11px;color:var(--orange);font-weight:700;margin-left:6px}
+  input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--orange) var(--pct,10%),#2a2a2a var(--pct,10%));outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--cream);border:3px solid var(--orange);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+
+  .out{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:24px}
+  @media(max-width:760px){.out{grid-template-columns:repeat(2,1fr)}}
+  .o{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:17px}
+  .o .k{color:var(--dim);font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+  .o .v{font-size:25px;font-weight:800;margin-top:7px}
+  .v.green{color:var(--green)} .v.amber{color:var(--amber)} .v.orange{color:var(--orange)} .v.red{color:var(--red)}
+
+  .bdown{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:760px){.bdown{grid-template-columns:repeat(2,1fr)}}
+  .bd{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:11px;padding:12px 14px}
+  .bd .l{color:var(--muted);font-size:11.5px;font-weight:600}
+  .bd .v{font-size:16px;font-weight:700;margin-top:4px;color:var(--amber)}
+
+  .breakeven{margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:15px 20px}
+  .breakeven .big{font-size:21px;font-weight:800;color:var(--orange)}
+  .breakeven .txt{color:var(--muted);font-size:14px}
+
+  .miniTbl{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  @media(max-width:680px){.miniTbl{grid-template-columns:repeat(3,1fr)}}
+  .mini{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px;text-align:center}
+  .mini .u{color:var(--muted);font-size:12px;font-weight:700}
+  .mini .p{font-size:17px;font-weight:800;margin-top:5px;color:var(--green)}
+  .mini .p.neg{color:var(--red)}
+
+  .assume{margin-top:15px;color:var(--dim);font-size:12px;line-height:1.6}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+  .panel h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);font-weight:700}
+  .panel .big{font-size:30px;font-weight:800;margin-top:12px}
+  .panel .big.g{color:var(--green)}
+  .panel p{color:var(--muted);font-size:13.5px;margin-top:10px;line-height:1.6}
+  .walletcalc{margin-top:14px}
+  .walletcalc .lab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .walletcalc .lab .t{color:var(--muted);font-size:12px}.walletcalc .lab .v{font-weight:800;font-size:18px}
+  .wstat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .wstat:last-child{border-bottom:none}.wstat .r{font-weight:700}
+
+  footer{margin-top:60px;border-top:1px solid var(--line);padding-top:24px;color:var(--dim);font-size:12px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">Sports Analytics<span class="dot"> · </span>the Baye Agent</div>
+    <nav>
+      <a href="#pricing">Pricing</a>
+      <a href="#roi">ROI</a>
+      <a href="#wallet">Wallet</a>
+      <a href="#compete">Competitors</a>
+      <a href="#grow">Room to grow</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">The Numbers</div>
+    <h1>What it really costs.<br>What it <span class="accent">makes</span>.</h1>
+    <p class="sub">The full money picture — real costs (infra, data, tools, payments, people), pricing, and how it scales. Drag the sliders; nothing here is hand-waved.</p>
+
+    <div class="band">
+      <div class="stat"><div class="k">Cost to run · software</div><div class="v" id="hero-cost">~$850<small>/mo</small></div><div class="n">Big Four, adjustable.</div></div>
+      <div class="stat"><div class="k">Breakeven</div><div class="v o" id="hero-be">~53</div><div class="n">paying users.</div></div>
+      <div class="stat"><div class="k">Margin / paid user</div><div class="v g" id="hero-margin">~86%</div><div class="n">after AI + fees.</div></div>
+      <div class="stat"><div class="k">Pricing</div><div class="v">$0–$20<small> +wallet</small></div><div class="n">room for $50 later.</div></div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="seyebrow">Pricing &amp; tiers</div>
+    <h2>Different levels — by how much data you see, and how much you ask the agent.</h2>
+    <p class="lead">Requests are kept deliberately low. A casual-but-active NFL bettor places ~40–50 bets a month — so that's roughly what Pro covers. Keep it low now, and there's headroom to charge more later.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="name">Free</div>
+        <div class="price">$0</div>
+        <div class="req">Demo agent only</div>
+        <div class="data"><b>Demo data.</b> A taste of the platform + sample briefs. Add the wallet to use the agent for real.</div>
+      </div>
+      <div class="tier">
+        <div class="name">Rookie</div>
+        <div class="price">$5<small> /mo</small></div>
+        <div class="req">~15 agent requests / mo</div>
+        <div class="data"><b>Per-game data.</b> The basics for the games you care about. All Big Four.</div>
+      </div>
+      <div class="tier hot">
+        <div class="badge">Most popular</div>
+        <div class="name">Pro</div>
+        <div class="price">$10<small> /mo</small></div>
+        <div class="req">~40 agent requests / mo</div>
+        <div class="data"><b>Comparisons &amp; context.</b> The historical breakdowns and line explanations.</div>
+      </div>
+      <div class="tier">
+        <div class="name">All-Star</div>
+        <div class="price">$20<small> /mo</small></div>
+        <div class="req">~80 agent requests / mo</div>
+        <div class="data"><b>Full depth.</b> Everything, deeper history, alerts, and auto-reload on the wallet.</div>
+      </div>
+    </div>
+    <div class="note"><b>Levels aren't locked yet</b> — the point is there are clear steps: more money unlocks more data depth and more agent. We start lean on purpose.</div>
+  </section>
+
+  <!-- ROI -->
+  <section id="roi">
+    <div class="seyebrow">ROI <span class="ill">Adjustable</span></div>
+    <h2>Drag the users. Move the settings. Watch the money.</h2>
+    <p class="lead">Software-only (you'd staff a team as you grow). Set your monthly software cost and your pricing, pick the AI provider, and drag the user count.</p>
+
+    <div class="calc">
+      <div class="userpick">
+        <div class="lab"><span class="t">Paying users</span><span class="u"><b id="u-count">1,000</b> subscribers</span></div>
+        <input type="range" id="users" min="0" max="10000" value="1000" step="25">
+      </div>
+
+      <div class="settings">
+        <div class="setting"><small>AI provider</small>
+          <div class="toggle">
+            <button id="b-openai" onclick="setProvider('openai')">OpenAI</button>
+            <button id="b-anthropic" class="on" onclick="setProvider('anthropic')">Anthropic</button>
+          </div>
+        </div>
+        <div class="setting"><small>Team · 3 × $65k/yr</small>
+          <div class="toggle">
+            <button id="b-team-off" class="on" onclick="setTeam(false)">Software only</button>
+            <button id="b-team-on" onclick="setTeam(true)">With team</button>
+          </div>
+        </div>
+        <div class="setting"><small>Software cost / mo</small>
+          <input type="range" id="fixed" min="500" max="5000" value="850" step="50">
+          <div class="val">$<span id="fixed-val">850</span>/mo <span class="est">est. $850</span></div>
+        </div>
+        <div class="setting"><small>Pricing · drag All-Star</small>
+          <input type="range" id="price" min="20" max="40" value="20" step="5">
+          <div class="val" id="price-val">$5 · $10 · $20</div>
+        </div>
+      </div>
+
+      <div class="out">
+        <div class="o"><div class="k">Revenue / mo</div><div class="v" id="o-rev">$9,250</div></div>
+        <div class="o"><div class="k">Total cost / mo</div><div class="v amber" id="o-cost">$2,178</div></div>
+        <div class="o"><div class="k">Net profit / mo</div><div class="v green" id="o-net">$7,072</div></div>
+        <div class="o"><div class="k">Net margin</div><div class="v orange" id="o-margin">76%</div></div>
+      </div>
+
+      <div class="bdown">
+        <div class="bd"><div class="l">Software (fixed)</div><div class="v" id="bd-fixed">$850</div></div>
+        <div class="bd"><div class="l">AI / agent</div><div class="v" id="bd-llm">$680</div></div>
+        <div class="bd"><div class="l">Payment fees</div><div class="v" id="bd-fee">$648</div></div>
+        <div class="bd"><div class="l">Team</div><div class="v" id="bd-team">$0</div></div>
+      </div>
+
+      <div class="breakeven">
+        <span class="big" id="be-line">Breakeven: 108 users</span>
+        <span class="txt" id="be-txt">— each paid user is ~86% margin before the fixed cost.</span>
+      </div>
+
+      <div class="miniTbl" id="mini"></div>
+
+      <p class="assume" id="roi-assume"></p>
+    </div>
+  </section>
+
+  <!-- WALLET -->
+  <section id="wallet">
+    <div class="seyebrow">Pay-as-you-go · the wallet <span class="ill">Big feature</span></div>
+    <h2>For people who just want the agent — no subscription.</h2>
+    <p class="lead">Stay on Free, load a balance, and use the Baye agent whenever — and the balance <b style="color:var(--cream)">never expires.</b> Auto-reload keeps it topped up so you never stall. Priced as a premium per request, so a subscription is the better deal for regulars — but the wallet is perfect for the occasional bettor.</p>
+
+    <div class="cols">
+      <div class="panel">
+        <h3>Same $20 — two different deals</h3>
+        <div class="wstat"><span>All-Star subscription</span><span class="r" style="color:var(--green)" id="cmp-sub">80 req + full data · resets monthly</span></div>
+        <div class="wstat"><span>Wallet (agent only)</span><span class="r" style="color:var(--orange)" id="cmp-wallet">33 requests · never expire</span></div>
+        <p>The subscription gives more requests <b style="color:var(--cream)">and</b> the full data tools — but they <b style="color:var(--cream)">reset every month and don't roll over.</b> The wallet gives fewer requests at a higher price, but <b style="color:var(--orange)">they never expire.</b> Load $20 once and use it whenever — ideal for the occasional bettor. Regulars subscribe; everyone else tops up.</p>
+      </div>
+      <div class="panel">
+        <h3>One reload</h3>
+        <div class="walletcalc">
+          <div class="lab"><span class="t">Amount loaded</span><span class="v"><b id="w-amt">$20</b></span></div>
+          <input type="range" id="wallet-amt" min="5" max="100" value="20" step="5">
+        </div>
+        <div style="margin-top:14px">
+          <div class="wstat"><span>Agent requests it buys</span><span class="r" id="w-req">66</span></div>
+          <div class="wstat"><span>Price / request</span><span class="r" id="w-price">$0.30</span></div>
+          <div class="wstat"><span>Costs us (AI)</span><span class="r" style="color:var(--amber)" id="w-cost">$1.19</span></div>
+          <div class="wstat"><span>Payment fee</span><span class="r" style="color:var(--amber)" id="w-fee">$1.40</span></div>
+          <div class="wstat"><span>We keep</span><span class="r" style="color:var(--green)" id="w-keep">$17.41</span></div>
+          <div class="wstat"><span>Margin</span><span class="r" style="color:var(--orange)" id="w-margin">87%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc" style="margin-top:16px">
+      <div class="userpick">
+        <div class="lab"><span class="t">Free users loading the wallet · $20/mo each</span><span class="u"><b id="ws-count">500</b> users</span></div>
+        <input type="range" id="wallet-users" min="0" max="3000" value="500" step="25">
+      </div>
+      <div class="out">
+        <div class="o"><div class="k">Wallet revenue / mo</div><div class="v" id="ws-rev">$10,000</div></div>
+        <div class="o"><div class="k">Our cost / mo</div><div class="v amber" id="ws-cost">$1,294</div></div>
+        <div class="o"><div class="k">Net profit / mo</div><div class="v green" id="ws-net">$8,706</div></div>
+        <div class="o"><div class="k">Margin</div><div class="v orange" id="ws-margin">87%</div></div>
+      </div>
+      <p class="assume">Pure upside <b style="color:var(--cream)">on top of</b> subscriptions — Free users paying only for agent use. Wallet is a flat <b style="color:var(--cream)">$0.60/request</b> that never expires (vs ~$0.25/request inside a subscription), so regulars still subscribe. Payment fees ~7%. Illustrative.</p>
+    </div>
+  </section>
+
+  <!-- COMPETITORS -->
+  <section id="compete">
+    <div class="seyebrow">Competitors</div>
+    <h2>What they charge — and what that implies.</h2>
+    <p class="lead">Same money as the others, opposite product. And a structurally cheaper, more scalable cost base than any of them.</p>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Competitor</th><th>Price</th><th>What you get there</th><th class="edge">Why people come to us</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Pick Discords</td><td class="num">$15–20/mo</td><td class="give">Blind picks. No why.</td><td class="edge">Our $20 explains every number — same price, you understand it.</td></tr>
+          <tr><td class="name">HeatCheck HQ</td><td class="num">~$12/mo</td><td class="give">Raw dashboards, no meaning.</td><td class="edge">Our $10 explains the data and adds the agent — cheaper.</td></tr>
+          <tr><td class="name">OddsJam</td><td class="num">~$199/mo</td><td class="give">Pro tools, no contextual brief.</td><td class="edge">Our $20 is ~1/10 the price, with the brief they don't offer.</td></tr>
+          <tr><td class="name">Gambly</td><td class="num">Picks via chat</td><td class="give">Conversational — but it picks.</td><td class="edge">We're conversational too — but never pick. That's the trust.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="kicker">Same money as a pick-seller. Opposite product — you understand it, and you keep that skill.</p>
+    <p class="assume">Competitor prices are directional, verified mid-2026 — worth a re-check before showing anyone.</p>
+  </section>
+
+  <!-- ROOM TO GROW -->
+  <section id="grow">
+    <div class="seyebrow">Room to grow</div>
+    <h2>We kept it low on purpose.</h2>
+    <p class="lead">Give a $20 user 400 requests and you've capped your own upside. Start lean, watch where the heavy users push, and that's the signal to go higher — not a reason to give it all away now.</p>
+
+    <div class="tiers">
+      <div class="tier soon">
+        <div class="badge grey">Next</div>
+        <div class="name">Sharps</div>
+        <div class="price">$50<small> /mo</small></div>
+        <div class="req">~200 requests / mo</div>
+        <div class="data"><b>For the heavy user.</b> All sports deep, API access, backtested signals, priority. The tier we launch once usage tells us to.</div>
+      </div>
+      <div class="tier soon">
+        <div class="badge grey">Lever</div>
+        <div class="name">The wallet</div>
+        <div class="price">Usage</div>
+        <div class="req">Scales with use, not seats</div>
+        <div class="data"><b>Pure-margin upside.</b> Heavy users keep reloading; revenue grows with engagement, capped by nothing.</div>
+      </div>
+      <div class="tier soon">
+        <div class="badge grey">Headroom</div>
+        <div class="name">Raise caps</div>
+        <div class="price">Later</div>
+        <div class="req">If demand is there</div>
+        <div class="data"><b>Cheap to give.</b> Anthropic per-request cost keeps falling — we can raise limits as a retention lever whenever we want.</div>
+      </div>
+      <div class="tier soon">
+        <div class="badge grey">Expand</div>
+        <div class="name">More sports</div>
+        <div class="price">Same engine</div>
+        <div class="req">Marginal data cost</div>
+        <div class="data"><b>Add coverage, not complexity.</b> The engine's built; new sports are mostly a data feed away.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="ill">The Numbers</span> &nbsp; Sports Analytics · the Baye Agent.<br>
+    Market context: ~$166.9B legally wagered in the US in 2025, +11% YoY, 39 states + DC — American Gaming Association, full-year 2025.<br>
+    Cost figures verified mid-2026 against vendor pricing. Pricing tiers are our design. ROI and competitor economics are illustrative.
+  </footer>
+
+</div>
+
+<script>
+  // ============ single source of truth ============
+  const REQ   = {rookie:15, pro:40, allstar:80};   // agent requests / mo
+  const MIX   = {rookie:0.45, pro:0.40, allstar:0.15};
+  const RATE  = {openai:0.011, anthropic:0.018};   // $/request (brief)
+  const FEE   = 0.07;                              // payment processing, % of revenue
+  const WALLET_PRICE = 0.60;                       // flat $/request on the wallet — never expires
+  const WALLET_LOAD = 20;                          // assumed $/mo per wallet user (at scale)
+  const TEAM_MONTHLY = 3 * 65000 / 12;             // 3 people × $65k/yr = $16,250/mo
+  const USER_MAX = 10000;
+
+  // adjustable settings
+  let provider  = 'anthropic';
+  let fixedCost = 850;     // software cost / mo (slider, $500–$5,000)
+  let allStar   = 20;      // All-Star price (slider, $20–$40); Pro = /2, Rookie = /4
+  let team      = false;   // toggle: add a real 3-person team
+
+  const el   = id => document.getElementById(id);
+  const fmt  = n => '$' + Math.round(n).toLocaleString();
+  const fmt2 = n => '$' + n.toFixed(2);
+  const money= n => '$' + (n % 1 === 0 ? n.toFixed(0) : n.toFixed(2));
+
+  // derived pricing (ratio 1 : 2 : 4)
+  const priceRookie = () => allStar / 4;
+  const pricePro    = () => allStar / 2;
+  const blended     = () => priceRookie()*MIX.rookie + pricePro()*MIX.pro + allStar*MIX.allstar;
+  const avgReq      = () => REQ.rookie*MIX.rookie + REQ.pro*MIX.pro + REQ.allstar*MIX.allstar; // 37.75
+
+  // cost model
+  const teamCost  = () => team ? TEAM_MONTHLY : 0;
+  const llm       = N => N * avgReq() * RATE[provider];
+  const revenue   = N => N * blended();
+  const fees      = N => revenue(N) * FEE;
+  const totalCost = N => fixedCost + teamCost() + llm(N) + fees(N);
+  const net       = N => revenue(N) - totalCost(N);
+  const contribution = () => blended() - avgReq()*RATE[provider] - blended()*FEE;
+  const breakeven = () => { const c = contribution(); return c > 0 ? Math.ceil((fixedCost + teamCost()) / c) : Infinity; };
+
+  // wallet: flat premium price per request → always pricier than a subscription, but never expires
+  const walletPrice = () => WALLET_PRICE;
+
+  function renderHero(){
+    el('hero-cost').innerHTML    = '~' + fmt(fixedCost) + '<small>/mo</small>';
+    el('hero-be').textContent    = '~' + breakeven();
+    el('hero-margin').textContent= '~' + Math.round(contribution()/blended()*100) + '%';
+  }
+
+  function renderROI(){
+    const n = +el('users').value;
+    const rev = revenue(n), profit = net(n);
+    el('u-count').textContent = n.toLocaleString();
+    el('o-rev').textContent   = fmt(rev);
+    el('o-cost').textContent  = fmt(totalCost(n));
+    const ne = el('o-net'); ne.textContent = (profit<0?'-':'')+fmt(Math.abs(profit)); ne.className='v '+(profit<0?'red':'green');
+    el('o-margin').textContent = rev>0 ? Math.round(profit/rev*100)+'%' : '—';
+
+    el('bd-fixed').textContent = fmt(fixedCost);
+    el('bd-llm').textContent   = fmt(llm(n));
+    el('bd-fee').textContent   = fmt(fees(n));
+    el('bd-team').textContent  = fmt(teamCost());
+
+    el('be-line').textContent = 'Breakeven: ' + breakeven().toLocaleString() + ' users';
+    el('be-txt').textContent  = team
+      ? '— includes a 3-person team (~$16,250/mo). Software-only it’s ~' + Math.ceil(fixedCost/contribution()) + '.'
+      : '— each paid user is ~' + Math.round(contribution()/blended()*100) + '% margin before the fixed cost.';
+
+    el('users').style.setProperty('--pct', (n/USER_MAX*100) + '%');
+
+    const levels = [100,500,1000,2500,5000];
+    el('mini').innerHTML = levels.map(L=>{
+      const p = net(L), neg = p<0;
+      return `<div class="mini"><div class="u">${L.toLocaleString()} users</div><div class="p ${neg?'neg':''}">${(neg?'-':'')+fmt(Math.abs(p))}</div></div>`;
+    }).join('');
+
+    el('roi-assume').textContent =
+      `Estimate. Blended price ${money(blended())}/user (Rookie ${money(priceRookie())} · Pro ${money(pricePro())} · All-Star ${money(allStar)}; mix 45/40/15), ~35 agent requests/user/mo. ` +
+      `AI/request: OpenAI ~$0.011 · Anthropic ~$0.018. Software cost set to ${fmt(fixedCost)}/mo. ` +
+      `Team ${team ? '= 3 × $65k/yr (~$16,250/mo)' : 'off (software only)'}. ` +
+      `Payment fees ~7% of revenue. Wallet revenue is extra upside on top of this.`;
+    renderHero();
+  }
+
+  function renderWallet(){
+    const price = walletPrice();
+    el('cmp-sub').textContent    = REQ.allstar + ' req + full data · resets monthly';
+    el('cmp-wallet').textContent = Math.floor(WALLET_LOAD / price + 1e-6) + ' requests · never expire';
+
+    const s = el('wallet-amt');
+    const amt = +s.value;
+    const req = Math.floor(amt / price + 1e-6);
+    const cost = req * RATE[provider];
+    const fee  = amt * FEE;
+    const keep = amt - cost - fee;
+    el('w-amt').textContent  = '$'+amt;
+    el('w-req').textContent  = req.toLocaleString();
+    el('w-price').textContent= fmt2(price);
+    el('w-cost').textContent = fmt2(cost);
+    el('w-fee').textContent  = fmt2(fee);
+    el('w-keep').textContent = fmt2(keep);
+    el('w-margin').textContent = Math.round(keep/amt*100)+'%';
+    s.style.setProperty('--pct', ((amt-5)/(100-5)*100) + '%');
+
+    renderWalletScale();
+  }
+
+  function renderWalletScale(){
+    const s = el('wallet-users');
+    const n = +s.value;
+    const price = walletPrice();
+    const rev = n * WALLET_LOAD;
+    const reqEach = Math.floor(WALLET_LOAD / price + 1e-6);
+    const ai  = n * reqEach * RATE[provider];
+    const fee = rev * FEE;
+    const profit = rev - ai - fee;
+    el('ws-count').textContent  = n.toLocaleString();
+    el('ws-rev').textContent    = fmt(rev);
+    el('ws-cost').textContent   = fmt(ai + fee);
+    el('ws-net').textContent    = fmt(profit);
+    el('ws-margin').textContent = rev>0 ? Math.round(profit/rev*100)+'%' : '—';
+    s.style.setProperty('--pct', (n/3000*100) + '%');
+  }
+
+  function setProvider(p){ provider=p; el('b-openai').classList.toggle('on',p==='openai'); el('b-anthropic').classList.toggle('on',p==='anthropic'); renderAll(); }
+  function setTeam(t){ team=t; el('b-team-on').classList.toggle('on',t); el('b-team-off').classList.toggle('on',!t); renderROI(); }
+  function setFixed(v){ fixedCost=+v; el('fixed-val').textContent=(+v).toLocaleString(); el('fixed').style.setProperty('--pct', ((v-500)/(5000-500)*100)+'%'); renderROI(); }
+  function setPrice(v){ allStar=+v; el('price-val').textContent = `${money(priceRookie())} · ${money(pricePro())} · ${money(allStar)}`; el('price').style.setProperty('--pct', ((v-20)/(40-20)*100)+'%'); renderAll(); }
+  function renderAll(){ renderROI(); renderWallet(); }
+
+  el('users').addEventListener('input', renderROI);
+  el('fixed').addEventListener('input', e=>setFixed(e.target.value));
+  el('price').addEventListener('input', e=>setPrice(e.target.value));
+  el('wallet-amt').addEventListener('input', renderWallet);
+  el('wallet-users').addEventListener('input', renderWalletScale);
+
+  setFixed(850);   // init readouts + slider fills
+  setPrice(20);
+  renderAll();
+</script>
+</body>
+</html>
