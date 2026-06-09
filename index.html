@@ -51,6 +51,7 @@
   .stat .v{font-size:29px;font-weight:800;margin-top:8px;letter-spacing:-.01em}
   .stat .v.o{color:var(--orange)} .stat .v.g{color:var(--green)}
   .stat .v small{font-size:15px;color:var(--muted);font-weight:600}
+  .stat .v small.l{display:block;margin-top:5px;font-size:12px;letter-spacing:.04em;font-weight:600}
   .stat .n{color:var(--muted);font-size:12px;margin-top:6px}
 
   section{padding:54px 0 0}
@@ -180,8 +181,8 @@
     <div class="band">
       <div class="stat"><div class="k">Cost to run · software</div><div class="v" id="hero-cost">~$850<small>/mo</small></div><div class="n">Big Four, adjustable.</div></div>
       <div class="stat"><div class="k">Usage markup</div><div class="v g" id="hero-markup">3×</div><div class="n">user pays this × our AI cost.</div></div>
-      <div class="stat"><div class="k">Wallet rate</div><div class="v">1k<small> tok/$</small></div><div class="n">subs get 20% more / $.</div></div>
-      <div class="stat"><div class="k">Avg question</div><div class="v o" id="hero-avg-ai">~15k</div><div class="n">AI tok → <b id="hero-avg-baye">~300</b> Baye tok.</div></div>
+      <div class="stat"><div class="k">Baye token rates</div><div class="v">1k<small> Baye tok/$</small></div><div class="n">Wallet: <b>1,000</b> Baye tok/$ · Subs: <b>1,200</b> Baye tok/$ (+20%)</div></div>
+      <div class="stat"><div class="k" id="hero-avg-label">Avg brief · Claude Opus 4.8</div><div class="v o" id="hero-avg-claude">~15,000<small class="l">Claude tokens</small></div><div class="n">→ <b id="hero-avg-baye">~450</b> Baye tokens debited</div></div>
     </div>
   </div>
 
@@ -528,8 +529,10 @@
     el('tier-pro-req').textContent      = tierReqLine('pro');
     el('tier-allstar-req').textContent  = tierReqLine('allstar');
     el('tier-sharps-req').textContent   = tierReqLine('sharps');
-    el('hero-avg-ai').textContent = '~' + fmtTok(AVG_AI_TOKENS);
-    el('hero-avg-baye').textContent      = '~' + Math.round(bayePerAvgQuestion());
+    const model = AI_MODELS[provider];
+    el('hero-avg-label').textContent = 'Avg brief · ' + model.name;
+    el('hero-avg-claude').innerHTML = '~' + fmtTokLong(AVG_AI_TOKENS) + '<small class="l">Claude tokens</small>';
+    el('hero-avg-baye').textContent = '~' + Math.round(bayePerAvgQuestion());
     el('hero-markup').textContent        = usageMarkup + '×';
     el('lead-markup').textContent        = usageMarkup + '×';
     renderMetering();
