@@ -44,7 +44,8 @@
   .sub{color:var(--muted);font-size:18px;margin-top:18px;max-width:640px}
 
   .band{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:38px}
-  @media(max-width:760px){.band{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:900px){.band{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.band{grid-template-columns:repeat(2,1fr)}}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
   .stat .k{color:var(--dim);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
   .stat .v{font-size:29px;font-weight:800;margin-top:8px;letter-spacing:-.01em}
@@ -130,10 +131,6 @@
   .bd .l{color:var(--muted);font-size:11.5px;font-weight:600}
   .bd .v{font-size:16px;font-weight:700;margin-top:4px;color:var(--amber)}
 
-  .breakeven{margin-top:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:15px 20px}
-  .breakeven .big{font-size:21px;font-weight:800;color:var(--orange)}
-  .breakeven .txt{color:var(--muted);font-size:14px}
-
   .miniTbl{margin-top:18px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
   @media(max-width:680px){.miniTbl{grid-template-columns:repeat(3,1fr)}}
   .mini{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px;text-align:center}
@@ -180,21 +177,19 @@
   <div class="hero">
     <div class="eyebrow">The Numbers</div>
     <h1>What it really costs.<br>What it <span class="accent">makes</span>.</h1>
-    <p class="sub">The full money picture — real costs (infra, data, tools, payments, people), pricing, and how it scales. Drag the sliders; nothing here is hand-waved.</p>
-
     <div class="band">
       <div class="stat"><div class="k">Cost to run · software</div><div class="v" id="hero-cost">~$850<small>/mo</small></div><div class="n">Big Four, adjustable.</div></div>
-      <div class="stat"><div class="k">Breakeven</div><div class="v o" id="hero-be">~53</div><div class="n">paying users.</div></div>
-      <div class="stat"><div class="k">Margin / paid user</div><div class="v g" id="hero-margin">~86%</div><div class="n">after AI + fees.</div></div>
-      <div class="stat"><div class="k">Pricing</div><div class="v">$0–$20<small> +wallet</small></div><div class="n">room for $50 later.</div></div>
+      <div class="stat"><div class="k">Usage markup</div><div class="v g" id="hero-markup">3×</div><div class="n">user pays this × our AI cost.</div></div>
+      <div class="stat"><div class="k">Wallet rate</div><div class="v">1k<small> tok/$</small></div><div class="n">subs get 20% more / $.</div></div>
+      <div class="stat"><div class="k">Avg question</div><div class="v o" id="hero-avg-ai">~15k</div><div class="n">AI tok → <b id="hero-avg-baye">~300</b> Baye tok.</div></div>
     </div>
   </div>
 
   <!-- PRICING -->
   <section id="pricing">
     <div class="seyebrow">Pricing &amp; tiers</div>
-    <h2>Different levels — by how much data you see, and how much you ask the agent.</h2>
-    <p class="lead">Requests are kept deliberately low. A casual-but-active NFL bettor places ~40–50 bets a month — so that's roughly what Pro covers. Keep it low now, and there's headroom to charge more later.</p>
+    <h2>Different levels — by how much data you see, and how many Baye tokens you burn on the agent.</h2>
+    <p class="lead">We meter on <b style="color:var(--cream)">Baye tokens</b>, not flat requests. Every question burns real <b style="color:var(--cream)">AI tokens</b> — light asks are cheap, deep briefs cost more. We charge a <b style="color:var(--cream)" id="lead-markup">3×</b> markup on our cost (slider in ROI). If a request costs us $1 in AI tokens, the user pays that multiple from their balance. Wallet loads: <b style="color:var(--cream)">1,000 Baye tokens / $1</b>. Subscriptions: <b style="color:var(--cream)">1,200 / $1</b> (+20% pool each month).</p>
 
     <div class="tiers">
       <div class="tier">
@@ -206,31 +201,38 @@
       <div class="tier">
         <div class="name">Rookie</div>
         <div class="price">$5<small> /mo</small></div>
-        <div class="req">~15 agent requests / mo</div>
+        <div class="req" id="tier-rookie-req">~180k tokens / mo</div>
         <div class="data"><b>Per-game data.</b> The basics for the games you care about. All Big Four.</div>
       </div>
       <div class="tier hot">
         <div class="badge">Most popular</div>
         <div class="name">Pro</div>
         <div class="price">$10<small> /mo</small></div>
-        <div class="req">~40 agent requests / mo</div>
+        <div class="req" id="tier-pro-req">~480k tokens / mo</div>
         <div class="data"><b>Comparisons &amp; context.</b> The historical breakdowns and line explanations.</div>
       </div>
       <div class="tier">
         <div class="name">All-Star</div>
         <div class="price">$20<small> /mo</small></div>
-        <div class="req">~80 agent requests / mo</div>
+        <div class="req" id="tier-allstar-req">~960k tokens / mo</div>
         <div class="data"><b>Full depth.</b> Everything, deeper history, alerts, and auto-reload on the wallet.</div>
       </div>
     </div>
-    <div class="note"><b>Levels aren't locked yet</b> — the point is there are clear steps: more money unlocks more data depth and more agent. We start lean on purpose.</div>
+    <div class="note"><b>Levels aren't locked yet</b> — more money unlocks more data depth and a larger monthly Baye token pool. Wallet balance never expires.</div>
+
+    <div class="tbl" style="margin-top:28px">
+      <table style="min-width:720px">
+        <thead><tr><th>Scenario</th><th>Model</th><th class="r">AI tokens</th><th class="r">Costs us</th><th class="r">User pays</th><th class="r edge">Baye tokens charged</th></tr></thead>
+        <tbody id="metering-rows"></tbody>
+      </table>
+    </div>
+    <p class="assume" id="metering-formula" style="margin-top:12px"></p>
   </section>
 
   <!-- ROI -->
   <section id="roi">
     <div class="seyebrow">ROI <span class="ill">Adjustable</span></div>
     <h2>Drag the users. Move the settings. Watch the money.</h2>
-    <p class="lead">Software-only (you'd staff a team as you grow). Set your monthly software cost and your pricing, pick the AI provider, and drag the user count.</p>
 
     <div class="calc">
       <div class="userpick">
@@ -239,10 +241,11 @@
       </div>
 
       <div class="settings">
-        <div class="setting"><small>AI provider</small>
+        <div class="setting"><small>AI model (ROI)</small>
           <div class="toggle">
-            <button id="b-openai" onclick="setProvider('openai')">OpenAI</button>
-            <button id="b-anthropic" class="on" onclick="setProvider('anthropic')">Anthropic</button>
+            <button id="b-opus" class="on" onclick="setProvider('opus')">Opus 4.8</button>
+            <button id="b-sonnet" onclick="setProvider('sonnet')">Sonnet 4.6</button>
+            <button id="b-haiku" onclick="setProvider('haiku')">Haiku 4.5</button>
           </div>
         </div>
         <div class="setting"><small>Team · 3 × $65k/yr</small>
@@ -250,6 +253,10 @@
             <button id="b-team-off" class="on" onclick="setTeam(false)">Software only</button>
             <button id="b-team-on" onclick="setTeam(true)">With team</button>
           </div>
+        </div>
+        <div class="setting"><small>AI usage markup</small>
+          <input type="range" id="markup" min="1" max="10" value="3" step="0.5">
+          <div class="val"><span id="markup-val">3×</span> <span class="est" id="markup-margin">67% margin on AI</span></div>
         </div>
         <div class="setting"><small>Software cost / mo</small>
           <input type="range" id="fixed" min="500" max="5000" value="850" step="50">
@@ -275,11 +282,6 @@
         <div class="bd"><div class="l">Team</div><div class="v" id="bd-team">$0</div></div>
       </div>
 
-      <div class="breakeven">
-        <span class="big" id="be-line">Breakeven: 108 users</span>
-        <span class="txt" id="be-txt">— each paid user is ~86% margin before the fixed cost.</span>
-      </div>
-
       <div class="miniTbl" id="mini"></div>
 
       <p class="assume" id="roi-assume"></p>
@@ -290,14 +292,14 @@
   <section id="wallet">
     <div class="seyebrow">Pay-as-you-go · the wallet <span class="ill">Big feature</span></div>
     <h2>For people who just want the agent — no subscription.</h2>
-    <p class="lead">Stay on Free, load a balance, and use the Baye agent whenever — and the balance <b style="color:var(--cream)">never expires.</b> Auto-reload keeps it topped up so you never stall. Priced as a premium per request, so a subscription is the better deal for regulars — but the wallet is perfect for the occasional bettor.</p>
+    <p class="lead">Stay on Free, load a balance, and use the Baye agent whenever — wallet tokens <b style="color:var(--cream)">never expire</b> at <b style="color:var(--cream)">1,000 tokens per dollar.</b> Subscribers get <b style="color:var(--cream)">20% more tokens per dollar</b> each month, plus full data tools.</p>
 
     <div class="cols">
       <div class="panel">
         <h3>Same $20 — two different deals</h3>
-        <div class="wstat"><span>All-Star subscription</span><span class="r" style="color:var(--green)" id="cmp-sub">80 req + full data · resets monthly</span></div>
-        <div class="wstat"><span>Wallet (agent only)</span><span class="r" style="color:var(--orange)" id="cmp-wallet">33 requests · never expire</span></div>
-        <p>The subscription gives more requests <b style="color:var(--cream)">and</b> the full data tools — but they <b style="color:var(--cream)">reset every month and don't roll over.</b> The wallet gives fewer requests at a higher price, but <b style="color:var(--orange)">they never expire.</b> Load $20 once and use it whenever — ideal for the occasional bettor. Regulars subscribe; everyone else tops up.</p>
+        <div class="wstat"><span>All-Star subscription</span><span class="r" style="color:var(--green)" id="cmp-sub">24k tokens + full data · resets monthly</span></div>
+        <div class="wstat"><span>Wallet (agent only)</span><span class="r" style="color:var(--orange)" id="cmp-wallet">20k tokens · never expire</span></div>
+        <p>The subscription gives <b style="color:var(--green)">20% more tokens</b> for the same money <b style="color:var(--cream)">and</b> the full data tools — but they <b style="color:var(--cream)">reset every month and don't roll over.</b> Wallet tokens never expire at <b style="color:var(--orange)">1,000 / $1</b>. Regulars subscribe; occasional users top up.</p>
       </div>
       <div class="panel">
         <h3>One reload</h3>
@@ -306,12 +308,15 @@
           <input type="range" id="wallet-amt" min="5" max="100" value="20" step="5">
         </div>
         <div style="margin-top:14px">
-          <div class="wstat"><span>Agent requests it buys</span><span class="r" id="w-req">66</span></div>
-          <div class="wstat"><span>Price / request</span><span class="r" id="w-price">$0.30</span></div>
-          <div class="wstat"><span>Costs us (AI)</span><span class="r" style="color:var(--amber)" id="w-cost">$1.19</span></div>
+          <div class="wstat"><span>Tokens it buys</span><span class="r" id="w-tok">20,000</span></div>
+          <div class="wstat"><span>~Avg-depth questions</span><span class="r" id="w-q">~67</span></div>
+          <div class="wstat"><span>Wallet rate</span><span class="r" id="w-price">1,000 Baye tok / $1</span></div>
+          <div class="wstat"><span>AI tokens if all used (avg)</span><span class="r" id="w-ai-tok">~1.0M tok</span></div>
+          <div class="wstat"><span>Costs us if all used</span><span class="r" style="color:var(--amber)" id="w-cost">$6.67</span></div>
+          <div class="wstat"><span>User value if all used (<span id="w-markup-label">3×</span>)</span><span class="r" id="w-user-val">$20.00</span></div>
           <div class="wstat"><span>Payment fee</span><span class="r" style="color:var(--amber)" id="w-fee">$1.40</span></div>
-          <div class="wstat"><span>We keep</span><span class="r" style="color:var(--green)" id="w-keep">$17.41</span></div>
-          <div class="wstat"><span>Margin</span><span class="r" style="color:var(--orange)" id="w-margin">87%</span></div>
+          <div class="wstat"><span>We keep (after AI + fee)</span><span class="r" style="color:var(--green)" id="w-keep">$11.93</span></div>
+          <div class="wstat"><span>AI markup margin</span><span class="r" style="color:var(--orange)" id="w-margin">67%</span></div>
         </div>
       </div>
     </div>
@@ -327,7 +332,7 @@
         <div class="o"><div class="k">Net profit / mo</div><div class="v green" id="ws-net">$8,706</div></div>
         <div class="o"><div class="k">Margin</div><div class="v orange" id="ws-margin">87%</div></div>
       </div>
-      <p class="assume">Pure upside <b style="color:var(--cream)">on top of</b> subscriptions — Free users paying only for agent use. Wallet is a flat <b style="color:var(--cream)">$0.60/request</b> that never expires (vs ~$0.25/request inside a subscription), so regulars still subscribe. Payment fees ~7%. Illustrative.</p>
+      <p class="assume">Pure upside <b style="color:var(--cream)">on top of</b> subscriptions — Free users paying only for agent tokens. Wallet: <b style="color:var(--cream)">1,000 tokens / $1</b> (never expire). Subscriptions: <b style="color:var(--cream)">1,200 tokens / $1</b> of tier price per month. Payment fees ~7%. Illustrative.</p>
     </div>
   </section>
 
@@ -335,7 +340,6 @@
   <section id="compete">
     <div class="seyebrow">Competitors</div>
     <h2>What they charge — and what that implies.</h2>
-    <p class="lead">Same money as the others, opposite product. And a structurally cheaper, more scalable cost base than any of them.</p>
 
     <div class="tbl">
       <table>
@@ -357,14 +361,13 @@
   <section id="grow">
     <div class="seyebrow">Room to grow</div>
     <h2>We kept it low on purpose.</h2>
-    <p class="lead">Give a $20 user 400 requests and you've capped your own upside. Start lean, watch where the heavy users push, and that's the signal to go higher — not a reason to give it all away now.</p>
 
     <div class="tiers">
       <div class="tier soon">
         <div class="badge grey">Next</div>
         <div class="name">Sharps</div>
         <div class="price">$50<small> /mo</small></div>
-        <div class="req">~200 requests / mo</div>
+        <div class="req" id="tier-sharps-req">~2.4M tokens / mo</div>
         <div class="data"><b>For the heavy user.</b> All sports deep, API access, backtested signals, priority. The tier we launch once usage tells us to.</div>
       </div>
       <div class="tier soon">
@@ -379,7 +382,7 @@
         <div class="name">Raise caps</div>
         <div class="price">Later</div>
         <div class="req">If demand is there</div>
-        <div class="data"><b>Cheap to give.</b> Anthropic per-request cost keeps falling — we can raise limits as a retention lever whenever we want.</div>
+        <div class="data"><b>Cheap to give.</b> AI per-token cost keeps falling — we can raise token caps as a retention lever whenever we want.</div>
       </div>
       <div class="tier soon">
         <div class="badge grey">Expand</div>
@@ -400,50 +403,140 @@
 </div>
 
 <script>
-  // ============ single source of truth ============
-  const REQ   = {rookie:15, pro:40, allstar:80};   // agent requests / mo
+  // ============ single source of truth (AI tokens → Baye downscale) ============
+  const AVG_AI_TOKENS = 15000;                     // typical brief (input + output)
+  const INPUT_SHARE = 0.75;                        // ~75% input / 25% output on a brief
+  const AI_MODELS = {
+    opus:   { name:'Claude Opus 4.8',   inPerM:5,  outPerM:25 },
+    sonnet: { name:'Claude Sonnet 4.6', inPerM:3,  outPerM:15 },
+    haiku:  { name:'Claude Haiku 4.5',  inPerM:1,  outPerM:5  },
+  };
+  const METERING_MODELS = ['opus', 'sonnet', 'haiku'];
+  const MARKUP_MIN = 1;
+  const MARKUP_MAX = 10;
+  const WALLET_TOKENS_PER_DOLLAR = 1000;
+  const SUB_BONUS = 1.20;
+  const SHARPS_PRICE = 50;
   const MIX   = {rookie:0.45, pro:0.40, allstar:0.15};
-  const RATE  = {openai:0.011, anthropic:0.018};   // $/request (brief)
-  const FEE   = 0.07;                              // payment processing, % of revenue
-  const WALLET_PRICE = 0.60;                       // flat $/request on the wallet — never expires
-  const WALLET_LOAD = 20;                          // assumed $/mo per wallet user (at scale)
-  const TEAM_MONTHLY = 3 * 65000 / 12;             // 3 people × $65k/yr = $16,250/mo
+  const FEE   = 0.07;
+  const WALLET_LOAD = 20;
+  const TEAM_MONTHLY = 3 * 65000 / 12;
   const USER_MAX = 10000;
+  const METERING_EXAMPLES = [
+    {label:'Light ask', tokens:3000},
+    {label:'Average brief', tokens:AVG_AI_TOKENS},
+    {label:'Deep dive', tokens:45000},
+  ];
 
-  // adjustable settings
-  let provider  = 'anthropic';
-  let fixedCost = 850;     // software cost / mo (slider, $500–$5,000)
-  let allStar   = 20;      // All-Star price (slider, $20–$40); Pro = /2, Rookie = /4
-  let team      = false;   // toggle: add a real 3-person team
+  let provider     = 'opus';
+  let fixedCost    = 850;
+  let allStar      = 20;
+  let usageMarkup  = 3;
+  let team         = false;
 
   const el   = id => document.getElementById(id);
   const fmt  = n => '$' + Math.round(n).toLocaleString();
   const fmt2 = n => '$' + n.toFixed(2);
   const money= n => '$' + (n % 1 === 0 ? n.toFixed(0) : n.toFixed(2));
+  const fmtTok = n => {
+    if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (n >= 1e3) return Math.round(n / 1000).toLocaleString() + 'k';
+    return Math.round(n).toLocaleString();
+  };
+  const fmtTokLong = n => Math.round(n).toLocaleString();
 
-  // derived pricing (ratio 1 : 2 : 4)
+  const walletTokens = dollars => dollars * WALLET_TOKENS_PER_DOLLAR;
+  const subTokens = dollars => Math.round(dollars * WALLET_TOKENS_PER_DOLLAR * SUB_BONUS);
+  const getBayePool = () => ({
+    rookie: subTokens(priceRookie()),
+    pro: subTokens(pricePro()),
+    allstar: subTokens(allStar),
+    sharps: subTokens(SHARPS_PRICE),
+  });
+
+  const ourCostForModel = (modelKey, totalTokens) => {
+    const m = AI_MODELS[modelKey];
+    const inp = totalTokens * INPUT_SHARE;
+    const out = totalTokens * (1 - INPUT_SHARE);
+    return (inp * m.inPerM + out * m.outPerM) / 1e6;
+  };
+  const blendedCostPerToken = modelKey => ourCostForModel(modelKey, 1);
+  const ourCostDollars = tokens => ourCostForModel(provider, tokens);
+  const userCostDollars = tokens => ourCostDollars(tokens) * usageMarkup;
+  const bayeFromUserDollars = dollars => Math.ceil(dollars * WALLET_TOKENS_PER_DOLLAR);
+  const bayeFromAiTokens = (tokens, modelKey = provider) =>
+    bayeFromUserDollars(ourCostForModel(modelKey, tokens) * usageMarkup);
+  const aiCostPerToken = () => blendedCostPerToken(provider);
+  const aiToBaye = () => usageMarkup * aiCostPerToken() * WALLET_TOKENS_PER_DOLLAR;
+  const aiMarginAtFullUse = () => Math.round((1 - 1 / usageMarkup) * 100);
+  const aiTokensFromBaye = baye => baye / aiToBaye();
+  const aiCostFromBayeSpend = baye => ourCostForModel(provider, aiTokensFromBaye(baye));
+  const bayePerAvgQuestion = () => bayeFromAiTokens(AVG_AI_TOKENS);
+  const questionsFromBayePool = pool => (pool / bayePerAvgQuestion()).toFixed(1).replace(/\.0$/, '');
+
   const priceRookie = () => allStar / 4;
   const pricePro    = () => allStar / 2;
   const blended     = () => priceRookie()*MIX.rookie + pricePro()*MIX.pro + allStar*MIX.allstar;
-  const avgReq      = () => REQ.rookie*MIX.rookie + REQ.pro*MIX.pro + REQ.allstar*MIX.allstar; // 37.75
+  const avgBayePoolPerUser = () => {
+    const T = getBayePool();
+    return T.rookie*MIX.rookie + T.pro*MIX.pro + T.allstar*MIX.allstar;
+  };
+  const avgReqEquivPerUser = () => avgBayePoolPerUser() / bayePerAvgQuestion();
+  const avgAiTokensPerUser = () => avgReqEquivPerUser() * AVG_AI_TOKENS;
 
-  // cost model
   const teamCost  = () => team ? TEAM_MONTHLY : 0;
-  const llm       = N => N * avgReq() * RATE[provider];
+  const llm       = N => N * ourCostForModel(provider, avgAiTokensPerUser());
   const revenue   = N => N * blended();
   const fees      = N => revenue(N) * FEE;
   const totalCost = N => fixedCost + teamCost() + llm(N) + fees(N);
   const net       = N => revenue(N) - totalCost(N);
-  const contribution = () => blended() - avgReq()*RATE[provider] - blended()*FEE;
-  const breakeven = () => { const c = contribution(); return c > 0 ? Math.ceil((fixedCost + teamCost()) / c) : Infinity; };
+  const aiCostPerUser = () => ourCostForModel(provider, avgAiTokensPerUser());
+  const contribution = () => blended() - aiCostPerUser() - blended()*FEE;
+  function tierReqLine(tier){
+    const pool = getBayePool()[tier];
+    const q = questionsFromBayePool(pool);
+    return `~${fmtTokLong(pool)} Baye tok / mo · ~${q} avg-depth questions`;
+  }
 
-  // wallet: flat premium price per request → always pricier than a subscription, but never expires
-  const walletPrice = () => WALLET_PRICE;
+  function renderMetering(){
+    let html = '';
+    METERING_EXAMPLES.forEach(ex => {
+      METERING_MODELS.forEach((key, i) => {
+        const m = AI_MODELS[key];
+        const ours = ourCostForModel(key, ex.tokens);
+        const user = ours * usageMarkup;
+        const baye = bayeFromUserDollars(user);
+        html += '<tr>';
+        if (i === 0) html += `<td class="name" rowspan="3">${ex.label}</td>`;
+        html += `<td class="name">${m.name}</td><td class="num">${fmtTokLong(ex.tokens)}</td>` +
+          `<td class="num">${fmt2(ours)}</td><td class="num">${fmt2(user)}</td><td class="num edge">${fmtTokLong(baye)}</td></tr>`;
+      });
+    });
+    el('metering-rows').innerHTML = html;
+    const sel = AI_MODELS[provider];
+    el('metering-formula').innerHTML =
+      `<b>Formula:</b> our cost = (input × $${sel.inPerM}/M) + (output × $${sel.outPerM}/M) — ` +
+      `assumed ${Math.round(INPUT_SHARE * 100)}% input / ${Math.round((1 - INPUT_SHARE) * 100)}% output on a brief. ` +
+      `User pays <b>${usageMarkup}×</b> our cost → Baye debited at ${WALLET_TOKENS_PER_DOLLAR.toLocaleString()} per $1. ` +
+      `Average brief on <b>${sel.name}</b> (${AVG_AI_TOKENS.toLocaleString()} AI tokens): costs us <b>${fmt2(ourCostDollars(AVG_AI_TOKENS))}</b>, ` +
+      `user pays <b>${fmt2(userCostDollars(AVG_AI_TOKENS))}</b> → <b>${fmtTokLong(bayePerAvgQuestion())} Baye tokens</b>. ` +
+      `Model not locked — table shows Opus, Sonnet, and Haiku side by side.`;
+  }
+
+  function renderTiers(){
+    el('tier-rookie-req').textContent   = tierReqLine('rookie');
+    el('tier-pro-req').textContent      = tierReqLine('pro');
+    el('tier-allstar-req').textContent  = tierReqLine('allstar');
+    el('tier-sharps-req').textContent   = tierReqLine('sharps');
+    el('hero-avg-ai').textContent = '~' + fmtTok(AVG_AI_TOKENS);
+    el('hero-avg-baye').textContent      = '~' + Math.round(bayePerAvgQuestion());
+    el('hero-markup').textContent        = usageMarkup + '×';
+    el('lead-markup').textContent        = usageMarkup + '×';
+    renderMetering();
+  }
 
   function renderHero(){
-    el('hero-cost').innerHTML    = '~' + fmt(fixedCost) + '<small>/mo</small>';
-    el('hero-be').textContent    = '~' + breakeven();
-    el('hero-margin').textContent= '~' + Math.round(contribution()/blended()*100) + '%';
+    el('hero-cost').innerHTML = '~' + fmt(fixedCost) + '<small>/mo</small>';
   }
 
   function renderROI(){
@@ -460,11 +553,6 @@
     el('bd-fee').textContent   = fmt(fees(n));
     el('bd-team').textContent  = fmt(teamCost());
 
-    el('be-line').textContent = 'Breakeven: ' + breakeven().toLocaleString() + ' users';
-    el('be-txt').textContent  = team
-      ? '— includes a 3-person team (~$16,250/mo). Software-only it’s ~' + Math.ceil(fixedCost/contribution()) + '.'
-      : '— each paid user is ~' + Math.round(contribution()/blended()*100) + '% margin before the fixed cost.';
-
     el('users').style.setProperty('--pct', (n/USER_MAX*100) + '%');
 
     const levels = [100,500,1000,2500,5000];
@@ -473,32 +561,43 @@
       return `<div class="mini"><div class="u">${L.toLocaleString()} users</div><div class="p ${neg?'neg':''}">${(neg?'-':'')+fmt(Math.abs(p))}</div></div>`;
     }).join('');
 
+    const modelLabel = AI_MODELS[provider].name;
     el('roi-assume').textContent =
-      `Estimate. Blended price ${money(blended())}/user (Rookie ${money(priceRookie())} · Pro ${money(pricePro())} · All-Star ${money(allStar)}; mix 45/40/15), ~35 agent requests/user/mo. ` +
-      `AI/request: OpenAI ~$0.011 · Anthropic ~$0.018. Software cost set to ${fmt(fixedCost)}/mo. ` +
-      `Team ${team ? '= 3 × $65k/yr (~$16,250/mo)' : 'off (software only)'}. ` +
-      `Payment fees ~7% of revenue. Wallet revenue is extra upside on top of this.`;
+      `Estimate. Blended price ${money(blended())}/user (Rookie ${money(priceRookie())} · Pro ${money(pricePro())} · All-Star ${money(allStar)}; mix 45/40/15). ` +
+      `~${fmtTok(avgBayePoolPerUser())} Baye tokens/user/mo ≈ ${avgReqEquivPerUser().toFixed(1)} avg-depth questions ` +
+      `(~${fmtTok(avgAiTokensPerUser())} AI tokens on ${modelLabel}). ` +
+      `Usage priced at ${usageMarkup}× our AI cost (~${fmtTokLong(bayePerAvgQuestion())} Baye per avg brief, ${aiMarginAtFullUse()}% AI margin). ` +
+      `Software ${fmt(fixedCost)}/mo. Team ${team ? 'on' : 'off'}. Payment fees ~7%. Wallet upside is extra.`;
     renderHero();
+    renderTiers();
   }
 
   function renderWallet(){
-    const price = walletPrice();
-    el('cmp-sub').textContent    = REQ.allstar + ' req + full data · resets monthly';
-    el('cmp-wallet').textContent = Math.floor(WALLET_LOAD / price + 1e-6) + ' requests · never expire';
+    const T = getBayePool();
+    const walletTok20 = walletTokens(WALLET_LOAD);
+    el('cmp-sub').textContent    = fmtTokLong(T.allstar) + ' Baye tok + full data · ~' + questionsFromBayePool(T.allstar) + ' avg questions';
+    el('cmp-wallet').textContent = fmtTokLong(walletTok20) + ' Baye tok · ~' + questionsFromBayePool(walletTok20) + ' avg questions';
 
     const s = el('wallet-amt');
     const amt = +s.value;
-    const req = Math.floor(amt / price + 1e-6);
-    const cost = req * RATE[provider];
+    const tok = walletTokens(amt);
+    const aiTok = aiTokensFromBaye(tok);
+    const cost = aiCostFromBayeSpend(tok);
+    const userVal = tok / WALLET_TOKENS_PER_DOLLAR;
     const fee  = amt * FEE;
     const keep = amt - cost - fee;
-    el('w-amt').textContent  = '$'+amt;
-    el('w-req').textContent  = req.toLocaleString();
-    el('w-price').textContent= fmt2(price);
-    el('w-cost').textContent = fmt2(cost);
-    el('w-fee').textContent  = fmt2(fee);
-    el('w-keep').textContent = fmt2(keep);
-    el('w-margin').textContent = Math.round(keep/amt*100)+'%';
+    const aiMargin = aiMarginAtFullUse();
+    el('w-amt').textContent   = '$'+amt;
+    el('w-tok').textContent   = fmtTokLong(tok);
+    el('w-q').textContent     = '~' + questionsFromBayePool(tok);
+    el('w-price').textContent = WALLET_TOKENS_PER_DOLLAR.toLocaleString() + ' Baye tok / $1';
+    el('w-ai-tok').textContent = '~' + fmtTok(aiTok);
+    el('w-cost').textContent  = fmt2(cost);
+    el('w-user-val').textContent = fmt2(userVal);
+    el('w-markup-label').textContent = usageMarkup + '×';
+    el('w-fee').textContent   = fmt2(fee);
+    el('w-keep').textContent  = fmt2(keep);
+    el('w-margin').textContent= aiMargin + '%';
     s.style.setProperty('--pct', ((amt-5)/(100-5)*100) + '%');
 
     renderWalletScale();
@@ -507,10 +606,9 @@
   function renderWalletScale(){
     const s = el('wallet-users');
     const n = +s.value;
-    const price = walletPrice();
     const rev = n * WALLET_LOAD;
-    const reqEach = Math.floor(WALLET_LOAD / price + 1e-6);
-    const ai  = n * reqEach * RATE[provider];
+    const tokEach = walletTokens(WALLET_LOAD);
+    const ai  = n * aiCostFromBayeSpend(tokEach);
     const fee = rev * FEE;
     const profit = rev - ai - fee;
     el('ws-count').textContent  = n.toLocaleString();
@@ -521,19 +619,32 @@
     s.style.setProperty('--pct', (n/3000*100) + '%');
   }
 
-  function setProvider(p){ provider=p; el('b-openai').classList.toggle('on',p==='openai'); el('b-anthropic').classList.toggle('on',p==='anthropic'); renderAll(); }
+  function setProvider(p){
+    provider = p;
+    METERING_MODELS.forEach(k => el('b-' + k).classList.toggle('on', p === k));
+    renderAll();
+  }
   function setTeam(t){ team=t; el('b-team-on').classList.toggle('on',t); el('b-team-off').classList.toggle('on',!t); renderROI(); }
   function setFixed(v){ fixedCost=+v; el('fixed-val').textContent=(+v).toLocaleString(); el('fixed').style.setProperty('--pct', ((v-500)/(5000-500)*100)+'%'); renderROI(); }
   function setPrice(v){ allStar=+v; el('price-val').textContent = `${money(priceRookie())} · ${money(pricePro())} · ${money(allStar)}`; el('price').style.setProperty('--pct', ((v-20)/(40-20)*100)+'%'); renderAll(); }
+  function setMarkup(v){
+    usageMarkup = +v;
+    el('markup-val').textContent = usageMarkup + '×';
+    el('markup-margin').textContent = aiMarginAtFullUse() + '% margin on AI';
+    el('markup').style.setProperty('--pct', ((v - MARKUP_MIN) / (MARKUP_MAX - MARKUP_MIN) * 100) + '%');
+    renderAll();
+  }
   function renderAll(){ renderROI(); renderWallet(); }
 
   el('users').addEventListener('input', renderROI);
   el('fixed').addEventListener('input', e=>setFixed(e.target.value));
+  el('markup').addEventListener('input', e=>setMarkup(e.target.value));
   el('price').addEventListener('input', e=>setPrice(e.target.value));
   el('wallet-amt').addEventListener('input', renderWallet);
   el('wallet-users').addEventListener('input', renderWalletScale);
 
-  setFixed(850);   // init readouts + slider fills
+  setFixed(850);
+  setMarkup(3);
   setPrice(20);
   renderAll();
 </script>
